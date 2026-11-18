@@ -1,0 +1,489 @@
+{
+  "base_3m": {
+    "total_trades": 3,
+    "winning_trades": 3,
+    "losing_trades": 0,
+    "win_rate": 100.0,
+    "gross_pnl": 420.35,
+    "gross_profit": 420.35,
+    "gross_loss": 0,
+    "profit_factor": 999.0,
+    "total_charges": 47.69,
+    "charge_breakdown": {
+      "brokerage": 26.85,
+      "stt": 11.23,
+      "exchange_txn": 2.85,
+      "sebi": 0.1,
+      "gst": 5.36,
+      "stamp_duty": 1.33
+    },
+    "net_pnl": 372.66,
+    "profit_pct": 2.48,
+    "friction_ratio_pct": 11.35,
+    "friction_ratio_winning_profit_pct": 11.35,
+    "friction_ratio_net_gross_pct": 11.35,
+    "ending_capital": 15372.66,
+    "daily_stats": [
+      {
+        "date": "2026-08-04",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-05",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-06",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-07",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-10",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-11",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-12",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-13",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-14",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-17",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-18",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-19",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-20",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-21",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-24",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-25",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-26",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-27",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-28",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-08-31",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-09-01",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-09-02",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-09-03",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-09-04",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15000.0
+      },
+      {
+        "date": "2026-09-07",
+        "trades_count": 1,
+        "day_pnl": 185.65,
+        "closing_capital": 15185.65
+      },
+      {
+        "date": "2026-09-08",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15185.65
+      },
+      {
+        "date": "2026-09-09",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15185.65
+      },
+      {
+        "date": "2026-09-10",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15185.65
+      },
+      {
+        "date": "2026-09-11",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15185.65
+      },
+      {
+        "date": "2026-09-15",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15185.65
+      },
+      {
+        "date": "2026-09-16",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15185.65
+      },
+      {
+        "date": "2026-09-17",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15185.65
+      },
+      {
+        "date": "2026-09-18",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15185.65
+      },
+      {
+        "date": "2026-09-21",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15185.65
+      },
+      {
+        "date": "2026-09-22",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15185.65
+      },
+      {
+        "date": "2026-09-23",
+        "trades_count": 1,
+        "day_pnl": 113.23,
+        "closing_capital": 15298.88
+      },
+      {
+        "date": "2026-09-24",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15298.88
+      },
+      {
+        "date": "2026-09-25",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15298.88
+      },
+      {
+        "date": "2026-09-28",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15298.88
+      },
+      {
+        "date": "2026-09-29",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15298.88
+      },
+      {
+        "date": "2026-09-30",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15298.88
+      },
+      {
+        "date": "2026-10-01",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15298.88
+      },
+      {
+        "date": "2026-10-05",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15298.88
+      },
+      {
+        "date": "2026-10-06",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15298.88
+      },
+      {
+        "date": "2026-10-07",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15298.88
+      },
+      {
+        "date": "2026-10-08",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15298.88
+      },
+      {
+        "date": "2026-10-09",
+        "trades_count": 1,
+        "day_pnl": 73.78,
+        "closing_capital": 15372.66
+      },
+      {
+        "date": "2026-10-12",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15372.66
+      },
+      {
+        "date": "2026-10-13",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15372.66
+      },
+      {
+        "date": "2026-10-14",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15372.66
+      },
+      {
+        "date": "2026-10-15",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15372.66
+      },
+      {
+        "date": "2026-10-16",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15372.66
+      },
+      {
+        "date": "2026-10-19",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15372.66
+      },
+      {
+        "date": "2026-10-21",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15372.66
+      },
+      {
+        "date": "2026-10-22",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15372.66
+      },
+      {
+        "date": "2026-10-23",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15372.66
+      },
+      {
+        "date": "2026-10-26",
+        "trades_count": 0,
+        "day_pnl": 0,
+        "closing_capital": 15372.66
+      }
+    ]
+  },
+  "monthly_table": [
+    {
+      "Period": "2026-09",
+      "Trades": 2,
+      "Win Rate": "100.0%",
+      "Gross (Rs)": 329.9,
+      "Charges (Rs)": 31.02,
+      "Net (Rs)": 298.88,
+      "ROI (%)": "1.99%"
+    },
+    {
+      "Period": "2026-10",
+      "Trades": 1,
+      "Win Rate": "100.0%",
+      "Gross (Rs)": 90.45,
+      "Charges (Rs)": 16.67,
+      "Net (Rs)": 73.78,
+      "ROI (%)": "0.49%"
+    },
+    {
+      "Period": "Full 57-Session Total",
+      "Trades": 3,
+      "Win Rate": "100.0%",
+      "Gross (Rs)": 420.35,
+      "Charges (Rs)": 47.69,
+      "Net (Rs)": 372.66,
+      "ROI (%)": "2.48%"
+    }
+  ],
+  "trades_sample": [
+    {
+      "date": "2026-09-07",
+      "symbol": "TRENT",
+      "side": "SELL",
+      "qty": 4,
+      "entry_time": "10:15",
+      "signal_time": "10:15",
+      "signal_price": 2823.6,
+      "entry_price": 2823.45,
+      "exit_time": "13:15",
+      "exit_price": 2774.05,
+      "exit_reason": "TARGET_HIT",
+      "gross_pnl": 197.6,
+      "charges": {
+        "buy_turnover": 11096.2,
+        "sell_turnover": 11293.8,
+        "total_turnover": 22390.0,
+        "brokerage": 6.72,
+        "stt": 2.82,
+        "exchange_txn": 0.71,
+        "sebi": 0.02,
+        "gst": 1.34,
+        "stamp_duty": 0.33,
+        "total_charges": 11.95
+      },
+      "total_charges": 11.95,
+      "net_pnl": 185.65,
+      "r_multiple": 2.0
+    },
+    {
+      "date": "2026-09-23",
+      "symbol": "HINDALCO",
+      "side": "BUY",
+      "qty": 18,
+      "entry_time": "11:25",
+      "signal_time": "11:25",
+      "signal_price": 989.9,
+      "entry_price": 989.95,
+      "exit_time": "14:55",
+      "exit_price": 997.3,
+      "exit_reason": "EOD_FLATTEN_1455",
+      "gross_pnl": 132.3,
+      "charges": {
+        "buy_turnover": 17819.100000000002,
+        "sell_turnover": 17951.399999999998,
+        "total_turnover": 35770.5,
+        "brokerage": 10.74,
+        "stt": 4.49,
+        "exchange_txn": 1.14,
+        "sebi": 0.04,
+        "gst": 2.15,
+        "stamp_duty": 0.53,
+        "total_charges": 19.07
+      },
+      "total_charges": 19.07,
+      "net_pnl": 113.23,
+      "r_multiple": 1.16
+    },
+    {
+      "date": "2026-10-09",
+      "symbol": "BAJAJFINSV",
+      "side": "BUY",
+      "qty": 9,
+      "entry_time": "11:20",
+      "signal_time": "11:20",
+      "signal_price": 1733.1,
+      "entry_price": 1733.35,
+      "exit_time": "14:55",
+      "exit_price": 1743.4,
+      "exit_reason": "EOD_FLATTEN_1455",
+      "gross_pnl": 90.45,
+      "charges": {
+        "buy_turnover": 15600.15,
+        "sell_turnover": 15690.6,
+        "total_turnover": 31290.75,
+        "brokerage": 9.39,
+        "stt": 3.92,
+        "exchange_txn": 1.0,
+        "sebi": 0.04,
+        "gst": 1.87,
+        "stamp_duty": 0.47,
+        "total_charges": 16.67
+      },
+      "total_charges": 16.67,
+      "net_pnl": 73.78,
+      "r_multiple": 0.79
+    }
+  ]
+}

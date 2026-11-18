@@ -1,0 +1,54 @@
+services:
+  apex3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: apex3:latest
+    container_name: apex3-trading-engine
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - TZ=Asia/Kolkata
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./.env:/app/.env
+      - ./apex3_journal.db:/app/apex3_journal.db
+      - ./info.log:/app/info.log
+      - ./logs:/app/logs
+    command: >
+      python -m apex3.main
+      --mode ${APEX3_MODE:-live}
+      --host 0.0.0.0
+      --port 5000
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:5000/ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: apex3-https-proxy
+    restart: unless-stopped
+    depends_on:
+      - apex3
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:

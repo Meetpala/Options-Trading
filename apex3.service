@@ -1,0 +1,20 @@
+[Unit]
+Description=APEX-3 Autonomous Intraday Trading Engine & Dashboard
+After=network-online.target time-sync.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=__APEX3_USER__
+WorkingDirectory=__APEX3_WORKDIR__
+EnvironmentFile=__APEX3_WORKDIR__/.env
+Environment=PYTHONUNBUFFERED=1
+Environment=TZ=Asia/Kolkata
+ExecStart=__APEX3_WORKDIR__/.venv/bin/python -m apex3.main --mode live --host 127.0.0.1 --port 5000
+Restart=always
+RestartSec=5s
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

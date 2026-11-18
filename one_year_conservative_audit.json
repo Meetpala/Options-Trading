@@ -1,0 +1,335 @@
+{
+  "audit_period": "2025-10-27 to 2026-10-26",
+  "sessions_count": 247,
+  "starting_capital": 15000.0,
+  "ending_capital": 15370.18,
+  "net_pnl": 370.18,
+  "profit_pct": 2.47,
+  "total_trades": 6,
+  "win_rate": 83.33,
+  "profit_factor": 4.9,
+  "statutory_friction_pct": 15.83,
+  "max_drawdown_inr": 133.12,
+  "max_drawdown_pct": 0.88,
+  "sharpe_ratio": -2.03,
+  "charges_breakdown": {
+    "brokerage": 51.75,
+    "stt": 21.61,
+    "exchange_txn": 5.49,
+    "sebi": 0.14,
+    "gst": 10.34,
+    "stamp_duty": 2.57
+  },
+  "monthly_summary": [
+    {
+      "Period": "2025-11",
+      "Trades": 1,
+      "Win Rate": "100.0%",
+      "Gross (Rs)": "+139.80",
+      "Charges (Rs)": "15.16",
+      "Net (Rs)": "+124.64",
+      "ROI (%)": "+0.83%"
+    },
+    {
+      "Period": "2026-02",
+      "Trades": 1,
+      "Win Rate": "0.0%",
+      "Gross (Rs)": "-118.40",
+      "Charges (Rs)": "14.72",
+      "Net (Rs)": "-133.12",
+      "ROI (%)": "-0.89%"
+    },
+    {
+      "Period": "2026-03",
+      "Trades": 1,
+      "Win Rate": "100.0%",
+      "Gross (Rs)": "+78.00",
+      "Charges (Rs)": "15.63",
+      "Net (Rs)": "+62.37",
+      "ROI (%)": "+0.42%"
+    },
+    {
+      "Period": "2026-09",
+      "Trades": 2,
+      "Win Rate": "100.0%",
+      "Gross (Rs)": "+329.90",
+      "Charges (Rs)": "31.02",
+      "Net (Rs)": "+298.88",
+      "ROI (%)": "+1.99%"
+    },
+    {
+      "Period": "2026-10",
+      "Trades": 1,
+      "Win Rate": "100.0%",
+      "Gross (Rs)": "+32.80",
+      "Charges (Rs)": "15.39",
+      "Net (Rs)": "+17.41",
+      "ROI (%)": "+0.12%"
+    },
+    {
+      "Period": "Full 1-Year Total (247 sess)",
+      "Trades": 6,
+      "Win Rate": "83.3%",
+      "Gross (Rs)": "+462.10",
+      "Charges (Rs)": "91.92",
+      "Net (Rs)": "+370.18",
+      "ROI (%)": "+2.47%"
+    }
+  ],
+  "quarterly_summary": [
+    {
+      "Period": "2025Q4",
+      "Trades": 1,
+      "Win Rate": "100.0%",
+      "Gross (Rs)": "+139.80",
+      "Charges (Rs)": "15.16",
+      "Net (Rs)": "+124.64",
+      "ROI (%)": "+0.83%"
+    },
+    {
+      "Period": "2026Q1",
+      "Trades": 2,
+      "Win Rate": "50.0%",
+      "Gross (Rs)": "-40.40",
+      "Charges (Rs)": "30.35",
+      "Net (Rs)": "-70.75",
+      "ROI (%)": "-0.47%"
+    },
+    {
+      "Period": "2026Q3",
+      "Trades": 2,
+      "Win Rate": "100.0%",
+      "Gross (Rs)": "+329.90",
+      "Charges (Rs)": "31.02",
+      "Net (Rs)": "+298.88",
+      "ROI (%)": "+1.99%"
+    },
+    {
+      "Period": "2026Q4",
+      "Trades": 1,
+      "Win Rate": "100.0%",
+      "Gross (Rs)": "+32.80",
+      "Charges (Rs)": "15.39",
+      "Net (Rs)": "+17.41",
+      "ROI (%)": "+0.12%"
+    }
+  ],
+  "symbol_summary": [
+    {
+      "Symbol": "BHARTIARTL",
+      "Trades": 1,
+      "Win Rate": "100.0%",
+      "Gross (Rs)": "+78.00",
+      "Charges (Rs)": "15.63",
+      "Net (Rs)": "+62.37"
+    },
+    {
+      "Symbol": "HINDALCO",
+      "Trades": 1,
+      "Win Rate": "100.0%",
+      "Gross (Rs)": "+132.30",
+      "Charges (Rs)": "19.07",
+      "Net (Rs)": "+113.23"
+    },
+    {
+      "Symbol": "JSWSTEEL",
+      "Trades": 1,
+      "Win Rate": "100.0%",
+      "Gross (Rs)": "+139.80",
+      "Charges (Rs)": "15.16",
+      "Net (Rs)": "+124.64"
+    },
+    {
+      "Symbol": "TATAPOWER",
+      "Trades": 2,
+      "Win Rate": "50.0%",
+      "Gross (Rs)": "-85.60",
+      "Charges (Rs)": "30.11",
+      "Net (Rs)": "-115.71"
+    },
+    {
+      "Symbol": "TRENT",
+      "Trades": 1,
+      "Win Rate": "100.0%",
+      "Gross (Rs)": "+197.60",
+      "Charges (Rs)": "11.95",
+      "Net (Rs)": "+185.65"
+    }
+  ],
+  "trades": [
+    {
+      "date": "2025-11-04",
+      "symbol": "JSWSTEEL",
+      "side": "SELL",
+      "qty": 12,
+      "entry_time": "10:40",
+      "signal_time": "10:40",
+      "signal_price": 1189.6,
+      "entry_price": 1189.75,
+      "exit_time": "14:55",
+      "exit_price": 1178.1,
+      "exit_reason": "EOD_FLATTEN_1455",
+      "gross_pnl": 139.8,
+      "charges": {
+        "buy_turnover": 14137.199999999999,
+        "sell_turnover": 14277.0,
+        "total_turnover": 28414.199999999997,
+        "brokerage": 8.52,
+        "stt": 3.57,
+        "exchange_txn": 0.9,
+        "sebi": 0.02,
+        "gst": 1.71,
+        "stamp_duty": 0.42,
+        "total_charges": 15.16
+      },
+      "total_charges": 15.16,
+      "net_pnl": 124.64,
+      "r_multiple": 1.21
+    },
+    {
+      "date": "2026-02-12",
+      "symbol": "TATAPOWER",
+      "side": "SELL",
+      "qty": 37,
+      "entry_time": "11:30",
+      "signal_time": "11:30",
+      "signal_price": 372.05,
+      "entry_price": 372.05,
+      "exit_time": "13:00",
+      "exit_price": 375.25,
+      "exit_reason": "STOP_LOSS",
+      "gross_pnl": -118.4,
+      "charges": {
+        "buy_turnover": 13884.25,
+        "sell_turnover": 13765.85,
+        "total_turnover": 27650.1,
+        "brokerage": 8.3,
+        "stt": 3.44,
+        "exchange_txn": 0.88,
+        "sebi": 0.02,
+        "gst": 1.65,
+        "stamp_duty": 0.42,
+        "total_charges": 14.72
+      },
+      "total_charges": 14.72,
+      "net_pnl": -133.12,
+      "r_multiple": -1.0
+    },
+    {
+      "date": "2026-03-25",
+      "symbol": "BHARTIARTL",
+      "side": "BUY",
+      "qty": 8,
+      "entry_time": "11:40",
+      "signal_time": "11:40",
+      "signal_price": 1828.5,
+      "entry_price": 1828.55,
+      "exit_time": "14:55",
+      "exit_price": 1838.3,
+      "exit_reason": "EOD_FLATTEN_1455",
+      "gross_pnl": 78.0,
+      "charges": {
+        "buy_turnover": 14628.4,
+        "sell_turnover": 14706.4,
+        "total_turnover": 29334.8,
+        "brokerage": 8.8,
+        "stt": 3.68,
+        "exchange_txn": 0.94,
+        "sebi": 0.02,
+        "gst": 1.76,
+        "stamp_duty": 0.44,
+        "total_charges": 15.63
+      },
+      "total_charges": 15.63,
+      "net_pnl": 62.37,
+      "r_multiple": 0.65
+    },
+    {
+      "date": "2026-09-07",
+      "symbol": "TRENT",
+      "side": "SELL",
+      "qty": 4,
+      "entry_time": "10:15",
+      "signal_time": "10:15",
+      "signal_price": 2823.6,
+      "entry_price": 2823.45,
+      "exit_time": "13:15",
+      "exit_price": 2774.05,
+      "exit_reason": "TARGET_HIT",
+      "gross_pnl": 197.6,
+      "charges": {
+        "buy_turnover": 11096.2,
+        "sell_turnover": 11293.8,
+        "total_turnover": 22390.0,
+        "brokerage": 6.72,
+        "stt": 2.82,
+        "exchange_txn": 0.71,
+        "sebi": 0.02,
+        "gst": 1.34,
+        "stamp_duty": 0.33,
+        "total_charges": 11.95
+      },
+      "total_charges": 11.95,
+      "net_pnl": 185.65,
+      "r_multiple": 2.0
+    },
+    {
+      "date": "2026-09-23",
+      "symbol": "HINDALCO",
+      "side": "BUY",
+      "qty": 18,
+      "entry_time": "11:25",
+      "signal_time": "11:25",
+      "signal_price": 989.9,
+      "entry_price": 989.95,
+      "exit_time": "14:55",
+      "exit_price": 997.3,
+      "exit_reason": "EOD_FLATTEN_1455",
+      "gross_pnl": 132.3,
+      "charges": {
+        "buy_turnover": 17819.100000000002,
+        "sell_turnover": 17951.399999999998,
+        "total_turnover": 35770.5,
+        "brokerage": 10.74,
+        "stt": 4.49,
+        "exchange_txn": 1.14,
+        "sebi": 0.04,
+        "gst": 2.15,
+        "stamp_duty": 0.53,
+        "total_charges": 19.07
+      },
+      "total_charges": 19.07,
+      "net_pnl": 113.23,
+      "r_multiple": 1.16
+    },
+    {
+      "date": "2026-10-16",
+      "symbol": "TATAPOWER",
+      "side": "BUY",
+      "qty": 41,
+      "entry_time": "10:55",
+      "signal_time": "10:55",
+      "signal_price": 351.75,
+      "entry_price": 351.8,
+      "exit_time": "14:55",
+      "exit_price": 352.6,
+      "exit_reason": "EOD_FLATTEN_1455",
+      "gross_pnl": 32.8,
+      "charges": {
+        "buy_turnover": 14423.800000000001,
+        "sell_turnover": 14456.6,
+        "total_turnover": 28880.4,
+        "brokerage": 8.67,
+        "stt": 3.61,
+        "exchange_txn": 0.92,
+        "sebi": 0.02,
+        "gst": 1.73,
+        "stamp_duty": 0.43,
+        "total_charges": 15.39
+      },
+      "total_charges": 15.39,
+      "net_pnl": 17.41,
+      "r_multiple": 0.28
+    }
+  ]
+}

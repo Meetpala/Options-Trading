@@ -1,0 +1,366 @@
+"""Hybrid Broker Adapter for APEX-3.
+
+SPLIT-FEED ARCHITECTURE:
+- Market Data Layer: Angel One SmartAPI (100% Free Forever live quotes, candles, instruments).
+- Execution Layer: Zerodha Kite Connect Personal Free (100% Free Forever orders, margins, positions).
+
+Strict Security & Separation:
+All order placements, modifications, cancellations, and margin checks are routed EXCLUSIVELY
+to Zerodha. Angel One is used solely as a read-only market data stream.
+"""
+from __future__ import annotations
+
+import copy
+import inspect
+import logging
+import threading
+import time
+from datetime import date, datetime
+from typing import Any, Optional
+
+from apex3.broker.angel_data_provider import AngelDataProvider
+from apex3.broker.interface import BrokerInterface
+from apex3.models import (
+    Candle,
+    InstrumentInfo,
+    MarginInfo,
+    OrderMarginEstimate,
+    OrderRequest,
+    OrderState,
+    PositionState,
+    Quote,
+)
+
+logger = logging.getLogger(__name__)
+
+
+class HybridBrokerAdapter(BrokerInterface):
+    """Hybrid broker adapter combining Angel One data feed with Zerodha order execution."""
+
+    def __init__(
+        self,
+        data_provider: AngelDataProvider,
+        execution_broker: BrokerInterface,
+    ) -> None:
+        self.data_provider = data_provider
+        self.execution_broker = execution_broker
+        self._status_lock = threading.Lock()
+        self._providers_status_cache: Optional[dict] = None
+        self._providers_status_mono: float = 0.0
+        logger.info(
+            "Initialized APEX-3 HYBRID BROKER ADAPTER: [Data: Angel One SmartAPI (Free)] -> [Execution: Zerodha Personal (Free)]"
+        )
+
+    # ── Market Data (Delegated to Angel One SmartAPI) ────────────────
+
+    def get_quote(self, symbol: str, exchange: str = "NSE") -> Quote:
+        """Fetch live quote from Angel One free data feed."""
+        q = self.data_provider.get_quote(symbol=symbol, exchange=exchange)
+        from apex3.broker.paper import PaperBroker
+        if isinstance(self.execution_broker, PaperBroker) and q is not None:
+            if q.last_price > 0:
+                self.execution_broker.simulate_tick(symbol, q.last_price)
+            self.execution_broker.set_quote(q)
+        return q
+
+    def get_quotes_batch(self, symbols: list[str], exchange: str = "NSE") -> dict[str, Quote]:
+        """Fetch batch quotes from Angel One free data feed in a single snapshot."""
+        if hasattr(self.data_provider, "get_quotes_batch"):
+            batch = self.data_provider.get_quotes_batch(symbols, exchange=exchange)
+        else:
+            batch = {sym: self.data_provider.get_quote(sym, exchange=exchange) for sym in symbols}
+        from apex3.broker.paper import PaperBroker
+        if isinstance(self.execution_broker, PaperBroker) and isinstance(batch, dict):
+            for sym, q in batch.items():
+                if q is not None:
+                    if q.last_price > 0:
+                        self.execution_broker.simulate_tick(sym, q.last_price)
+                    self.execution_broker.set_quote(q)
+        return batch
+
+    def get_nfo_option_contracts(self, underlying: str) -> list[Any]:
+        """Merge authoritative Zerodha NFO tradingsymbols with Angel One NFO streaming tokens."""
+        from apex3.strategy.options_resolver import OptionContractSpec
+
+        angel_contracts: list[OptionContractSpec] = []
+        if hasattr(self.data_provider, "get_nfo_option_contracts"):
+            try:
+                angel_contracts = self.data_provider.get_nfo_option_contracts(underlying)
+            except Exception as ae:
+                logger.warning("Angel NFO contract lookup failed for %s: %s", underlying, ae)
+
+        kite_contracts: list[OptionContractSpec] = []
+        if hasattr(self.execution_broker, "get_nfo_option_contracts"):
+            try:
+                kite_contracts = self.execution_broker.get_nfo_option_contracts(underlying)
+            except Exception as ke:
+                logger.warning("Execution broker NFO contract lookup failed for %s: %s", underlying, ke)
+
+        if kite_contracts and angel_contracts:
+            # Index Angel contracts by (expiry_date, strike, option_type) for exact token merge
+            angel_idx = {
+                (c.expiry_date, round(c.strike, 2), c.option_type): c
+                for c in angel_contracts
+            }
+            merged: list[OptionContractSpec] = []
+            for kc in kite_contracts:
+                ac = angel_idx.get((kc.expiry_date, round(kc.strike, 2), kc.option_type))
+                if ac is not None:
+                    # Register Zerodha symbol -> Angel token for direct NFO depth lookups
+                    if hasattr(self.data_provider, "_nfo_token_cache") and ac.angel_token:
+                        self.data_provider._nfo_token_cache[kc.zerodha_symbol] = ac.angel_token
+                    merged.append(
+                        OptionContractSpec(
+                            underlying=kc.underlying,
+                            expiry_date=kc.expiry_date,
+                            strike=kc.strike,
+                            option_type=kc.option_type,
+                            lot_size=kc.lot_size,
+                            tick_size=kc.tick_size,
+                            zerodha_symbol=kc.zerodha_symbol,
+                            angel_symbol=ac.angel_symbol,
+                            angel_token=ac.angel_token,
+                            kite_token=kc.kite_token,
+                            dte=kc.dte,
+                        )
+                    )
+            if merged:
+                return merged
+
+        return angel_contracts or kite_contracts
+
+    def get_option_quotes_batch(self, contracts: list[Any]) -> dict[str, Quote]:
+        """Fetch live FULL NFO option depth from Angel One keyed by Zerodha tradingsymbol."""
+        if hasattr(self.data_provider, "get_option_quotes_batch"):
+            batch = self.data_provider.get_option_quotes_batch(contracts)
+        else:
+            syms = [getattr(c, "zerodha_symbol", "") for c in contracts if getattr(c, "zerodha_symbol", "")]
+            batch = self.get_quotes_batch(syms, exchange="NFO")
+        from apex3.broker.paper import PaperBroker
+        if isinstance(self.execution_broker, PaperBroker) and isinstance(batch, dict):
+            for sym, q in batch.items():
+                if q is not None:
+                    if q.last_price > 0:
+                        self.execution_broker.simulate_tick(sym, q.last_price)
+                    self.execution_broker.set_quote(q)
+        return batch
+
+    def get_historical(
+        self,
+        symbol: str,
+        interval: str,
+        from_dt: datetime,
+        to_dt: datetime,
+        exchange: str = "NSE",
+    ) -> list[Candle]:
+        """Fetch historical candles from Angel One free data feed."""
+        return self.data_provider.get_historical(
+            symbol=symbol,
+            interval=interval,
+            from_dt=from_dt,
+            to_dt=to_dt,
+            exchange=exchange,
+        )
+
+    def get_instrument_info(self, symbol: str, exchange: str = "NSE") -> InstrumentInfo:
+        """Fetch instrument info, using execution broker for execution metadata and data provider for streaming/circuits."""
+        # 1. Query execution broker for authoritative Zerodha execution parameters
+        exec_info: Optional[InstrumentInfo] = None
+        if hasattr(self.execution_broker, "get_instrument_info"):
+            try:
+                exec_info = self.execution_broker.get_instrument_info(symbol=symbol, exchange=exchange)
+            except Exception as e:
+                logger.warning("Could not fetch execution broker instrument info for %s: %s", symbol, e)
+
+        # 2. Query data provider for Angel streaming token and cached circuits
+        data_info = self.data_provider.get_instrument_info(symbol=symbol, exchange=exchange)
+        angel_token = getattr(data_info, "exchange_token", "") or getattr(data_info, "instrument_token", "")
+        if not angel_token and hasattr(self.data_provider, "resolve_token"):
+            try:
+                angel_token = self.data_provider.resolve_token(symbol, exchange) or ""
+            except Exception:
+                pass
+
+        if exec_info is not None:
+            up_c = data_info.upper_circuit if data_info.upper_circuit > 0 else exec_info.upper_circuit
+            low_c = data_info.lower_circuit if data_info.lower_circuit > 0 else exec_info.lower_circuit
+            t_size = exec_info.tick_size if exec_info.tick_size > 0 else data_info.tick_size
+            if (up_c <= 0 or low_c <= 0) and t_size > 0:
+                cached_q = getattr(self.data_provider, "_quote_cache", {}).get(symbol)
+                ref_px = 0.0
+                if cached_q:
+                    ref_px = cached_q.close if cached_q.close > 0 else cached_q.last_price
+                if ref_px > 0:
+                    up_c = round(round(ref_px * 1.10 / t_size) * t_size, 2) if up_c <= 0 else up_c
+                    low_c = round(round(ref_px * 0.90 / t_size) * t_size, 2) if low_c <= 0 else low_c
+
+            order_lot = exec_info.order_lot_size if exec_info.order_lot_size > 0 else getattr(data_info, "order_lot_size", 1)
+            lot_mult = exec_info.lot_multiplier if exec_info.lot_multiplier > 0 else getattr(data_info, "lot_multiplier", 1)
+            exp_d = exec_info.expiry_date or getattr(data_info, "expiry_date", None)
+            dte = exec_info.days_to_expiry if exec_info.days_to_expiry < 999 else getattr(data_info, "days_to_expiry", 999)
+
+            return InstrumentInfo(
+                symbol=exec_info.symbol,
+                exchange=exec_info.exchange,
+                tick_size=t_size,
+                lot_size=exec_info.lot_size if exec_info.lot_size > 0 else data_info.lot_size,
+                order_lot_size=order_lot,
+                lot_multiplier=lot_mult,
+                expiry_date=exp_d,
+                days_to_expiry=dte,
+                exchange_token=angel_token,
+                instrument_token=exec_info.instrument_token or angel_token,
+                upper_circuit=up_c,
+                lower_circuit=low_c,
+                mis_available=exec_info.mis_available,
+            )
+
+        # If execution broker info is missing, fail safe by marking mis_available as False
+        logger.warning("Execution broker instrument info unavailable for %s; refusing to assume MIS eligibility", symbol)
+        return InstrumentInfo(
+            symbol=data_info.symbol,
+            exchange=data_info.exchange,
+            tick_size=data_info.tick_size,
+            lot_size=data_info.lot_size,
+            order_lot_size=getattr(data_info, "order_lot_size", 1),
+            lot_multiplier=getattr(data_info, "lot_multiplier", 1),
+            expiry_date=getattr(data_info, "expiry_date", None),
+            days_to_expiry=getattr(data_info, "days_to_expiry", 999),
+            exchange_token=getattr(data_info, "instrument_token", ""),
+            instrument_token=getattr(data_info, "instrument_token", ""),
+            upper_circuit=data_info.upper_circuit,
+            lower_circuit=data_info.lower_circuit,
+            mis_available=False,
+        )
+
+    # ── Order Execution & Portfolio (Delegated to Zerodha Personal) ──
+
+    def get_margins(self, segment: str = "equity") -> MarginInfo:
+        """Fetch margin from Zerodha."""
+        if hasattr(self.execution_broker, "get_margins"):
+            sig = inspect.signature(self.execution_broker.get_margins)
+            if "segment" in sig.parameters:
+                return self.execution_broker.get_margins(segment=segment)
+        return self.execution_broker.get_margins()
+
+    def estimate_order_margin(self, request: OrderRequest) -> OrderMarginEstimate:
+        """Estimate order margin from Zerodha."""
+        return self.execution_broker.estimate_order_margin(request)
+
+    def place_order(self, request: OrderRequest) -> str:
+        """Submit live order EXCLUSIVELY to Zerodha."""
+        logger.info("HYBRID ROUTE: Routing order for %s to ZERODHA", request.symbol)
+        return self.execution_broker.place_order(request)
+
+    def modify_order(
+        self,
+        order_id: str,
+        quantity: Optional[int] = None,
+        price: Optional[float] = None,
+        trigger_price: Optional[float] = None,
+        order_type: Optional[str] = None,
+    ) -> bool:
+        """Modify order EXCLUSIVELY on Zerodha."""
+        return self.execution_broker.modify_order(
+            order_id=order_id,
+            quantity=quantity,
+            price=price,
+            trigger_price=trigger_price,
+            order_type=order_type,
+        )
+
+    def cancel_order(self, order_id: str) -> bool:
+        """Cancel order EXCLUSIVELY on Zerodha."""
+        return self.execution_broker.cancel_order(order_id)
+
+    def get_order_status(self, order_id: str) -> OrderState:
+        """Fetch order status from Zerodha."""
+        return self.execution_broker.get_order_status(order_id)
+
+    def get_orders(self) -> list[OrderState]:
+        """Fetch orders from Zerodha."""
+        return self.execution_broker.get_orders()
+
+    def get_trades(self) -> list[dict]:
+        """Fetch trades from Zerodha."""
+        return self.execution_broker.get_trades()
+
+    def get_positions(self) -> list[PositionState]:
+        """Fetch net positions from Zerodha."""
+        return self.execution_broker.get_positions()
+
+    def get_providers_status(self, max_age_sec: float = 15.0) -> dict:
+        """Per-provider session health for /health and /api/status (read-only, cached, single-flight).
+
+        Zerodha (execution) and Angel One (market data) are probed independently so an outage is
+        attributed to the right provider. Results are cached for `max_age_sec` so dashboard and
+        Docker healthcheck polling cannot hammer broker APIs or trigger rate limits. The lock is held
+        during a refresh, so concurrent pollers wait for one probe instead of stampeding.
+        """
+        with self._status_lock:
+            now_m = time.monotonic()
+            cached = self._providers_status_cache
+            if cached is not None and (now_m - self._providers_status_mono) < max_age_sec:
+                out = copy.deepcopy(cached)
+                out["cached"] = True
+                out["age_sec"] = round(now_m - self._providers_status_mono, 1)
+                return out
+
+            zerodha = self._probe(self.execution_broker, "zerodha")
+            angel = self._probe(self.data_provider, "angel_one")
+            fresh = {"zerodha": zerodha, "angel_one": angel}
+            self._providers_status_cache = fresh
+            self._providers_status_mono = time.monotonic()
+            out = copy.deepcopy(fresh)
+            out["cached"] = False
+            out["age_sec"] = 0.0
+            return out
+
+    @staticmethod
+    def _probe(provider, label: str) -> dict:
+        """Run one provider's diagnostics; never raises, always returns a normalized dict."""
+        diag = None
+        fn = getattr(provider, "get_session_diagnostics", None)
+        if callable(fn):
+            try:
+                diag = fn()
+            except Exception as e:
+                diag = {"session_valid": False, "status": "ERROR", "error": f"{type(e).__name__}: {e}"[:160]}
+        if not isinstance(diag, dict):
+            try:
+                ok = bool(provider.is_session_valid())
+                diag = {"session_valid": ok, "status": "CONNECTED" if ok else "DISCONNECTED",
+                        "error": None if ok else "Session invalid"}
+            except Exception as e:
+                diag = {"session_valid": False, "status": "ERROR", "error": f"{type(e).__name__}: {e}"[:160]}
+        diag["session_valid"] = bool(diag.get("session_valid"))
+        return diag
+
+    def is_session_valid(self) -> bool:
+        """Check session validity on BOTH data provider and execution broker, self-healing Angel token if dropped."""
+        exec_valid = bool(self.execution_broker.is_session_valid())
+        if not exec_valid:
+            logger.critical("Hybrid session check FAILED: Zerodha execution session is invalid or expired.")
+            return False
+
+        data_valid = True
+        if hasattr(self.data_provider, "is_session_valid"):
+            data_valid = bool(self.data_provider.is_session_valid())
+            if not data_valid and hasattr(self.data_provider, "authenticate"):
+                now_m = time.monotonic()
+                if now_m - getattr(self, "_last_angel_reauth_attempt", 0.0) > 60.0:
+                    self._last_angel_reauth_attempt = now_m
+                    logger.warning("Angel One data session invalid; attempting automatic self-heal authentication (cooldown 60s)...")
+                    try:
+                        self.data_provider.authenticate()
+                        data_valid = bool(self.data_provider.is_session_valid())
+                    except Exception as auth_err:
+                        logger.error("Angel One auto self-heal authentication failed: %s", auth_err)
+                        data_valid = False
+
+        if not data_valid:
+            logger.critical("Hybrid session check FAILED: Angel One market data session is invalid or unauthenticated.")
+            return False
+
+        return True
+
